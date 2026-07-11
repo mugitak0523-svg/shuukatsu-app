@@ -1,0 +1,1 @@
+ALTER TYPE "CalendarItemType" ADD VALUE 'DEADLINE';

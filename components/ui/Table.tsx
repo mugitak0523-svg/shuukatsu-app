@@ -6,7 +6,7 @@ export function Table({
 }: React.TableHTMLAttributes<HTMLTableElement>) {
   return (
     <div className="overflow-x-auto rounded-lg border border-[#e5e5e5] bg-white">
-      <table className={cn("w-full min-w-[820px] border-collapse text-sm", className)} {...props} />
+      <table className={cn("w-full min-w-[980px] border-collapse text-sm", className)} {...props} />
     </div>
   );
 }

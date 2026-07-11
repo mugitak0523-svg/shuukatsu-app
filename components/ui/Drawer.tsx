@@ -46,7 +46,7 @@ export function Drawer({ children, description, onClose, open, title }: DrawerPr
       <button
         aria-label="閉じる"
         className={cn(
-          "absolute inset-0 bg-black/20",
+          "absolute inset-0 cursor-pointer bg-black/20",
           closing ? "drawer-mask-out" : "drawer-mask-in",
         )}
         type="button"
@@ -67,7 +67,7 @@ export function Drawer({ children, description, onClose, open, title }: DrawerPr
           </div>
           <button
             aria-label="閉じる"
-            className="flex h-8 w-8 items-center justify-center rounded-md text-[#666666] hover:bg-[#f5f5f5] hover:text-[#111111]"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-[#666666] hover:bg-[#f5f5f5] hover:text-[#111111]"
             type="button"
             onClick={onClose}
           >

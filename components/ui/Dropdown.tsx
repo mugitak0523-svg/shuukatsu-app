@@ -20,6 +20,8 @@ type DropdownProps = {
   allowCustomValue?: boolean;
   required?: boolean;
   maxLength?: number;
+  value?: string | null;
+  onValueChange?: (value: string) => void;
 };
 
 export function Dropdown({
@@ -32,6 +34,8 @@ export function Dropdown({
   allowCustomValue,
   required,
   maxLength,
+  value: controlledValue,
+  onValueChange,
 }: DropdownProps) {
   const normalizedOptions = useMemo(
     () =>
@@ -41,8 +45,17 @@ export function Dropdown({
     [options],
   );
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(defaultValue ?? "");
+  const [internalValue, setInternalValue] = useState(defaultValue ?? "");
   const rootRef = useRef<HTMLDivElement>(null);
+  const value = controlledValue ?? internalValue;
+
+  function setValue(nextValue: string) {
+    if (controlledValue === undefined) {
+      setInternalValue(nextValue);
+    }
+
+    onValueChange?.(nextValue);
+  }
 
   const selectedLabel =
     normalizedOptions.find((option) => option.value === value)?.label ?? value;
@@ -91,7 +104,7 @@ export function Dropdown({
           />
           <button
             aria-label="候補を開く"
-            className="absolute inset-y-0 right-0 flex w-9 items-center justify-center text-[#666666] hover:text-[#111111]"
+            className="absolute inset-y-0 right-0 flex w-9 cursor-pointer items-center justify-center text-[#666666] hover:text-[#111111]"
             type="button"
             onClick={() => setOpen((current) => !current)}
           >
@@ -116,7 +129,7 @@ export function Dropdown({
       <button
         aria-expanded={open}
         className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border border-[#e5e5e5] bg-white px-3 text-left text-sm outline-none transition-colors hover:bg-[#f5f5f5] focus:border-[#111111]",
+          "flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-[#e5e5e5] bg-white px-3 text-left text-sm outline-none transition-colors hover:bg-[#f5f5f5] focus:border-[#111111]",
           value ? "text-[#111111]" : "text-[#999999]",
         )}
         type="button"
@@ -160,7 +173,7 @@ function DropdownMenu({
     <div className="absolute z-20 mt-1 max-h-64 w-full overflow-auto rounded-md border border-[#e5e5e5] bg-white p-1 shadow-sm">
       {emptyLabel ? (
         <button
-          className="block w-full rounded px-3 py-2 text-left text-sm text-[#999999] hover:bg-[#f5f5f5]"
+          className="block w-full cursor-pointer rounded px-3 py-2 text-left text-sm text-[#999999] hover:bg-[#f5f5f5]"
           type="button"
           onClick={() => {
             setValue("");
@@ -175,7 +188,7 @@ function DropdownMenu({
           <button
             key={option.value}
             className={cn(
-              "block w-full rounded px-3 py-2 text-left text-sm hover:bg-[#f5f5f5]",
+              "block w-full cursor-pointer rounded px-3 py-2 text-left text-sm hover:bg-[#f5f5f5]",
               value === option.value
                 ? "bg-[#f5f5f5] font-medium text-[#111111]"
                 : "text-[#111111]",

@@ -1,15 +1,15 @@
 import { signIn } from "@/auth";
-import { Button } from "@/components/ui/Button";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 
 export function SignInButton() {
   return (
     <form
       action={async () => {
         "use server";
-        await signIn("google", { redirectTo: "/companies" });
+        await signIn("google", { redirectTo: "/calendar" });
       }}
     >
-      <Button type="submit">Googleで続ける</Button>
+      <SubmitButton pendingLabel="ログイン中...">Googleで続ける</SubmitButton>
     </form>
   );
 }

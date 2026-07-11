@@ -1,14 +1,18 @@
 import { signOutAction } from "@/server/actions/auth";
-import { Button } from "@/components/ui/Button";
 import { LogOutIcon } from "@/components/ui/Icons";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 
 export function SignOutButton() {
   return (
     <form action={signOutAction} className="w-full">
-      <Button className="w-full justify-start gap-2 px-3" type="submit" variant="ghost">
+      <SubmitButton
+        className="w-full justify-start gap-2 px-3"
+        pendingLabel="ログアウト中..."
+        variant="ghost"
+      >
         <LogOutIcon />
         ログアウト
-      </Button>
+      </SubmitButton>
     </form>
   );
 }

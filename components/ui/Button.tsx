@@ -17,7 +17,7 @@ export function buttonClasses({
   className?: string;
 } = {}) {
   return cn(
-    "inline-flex h-10 items-center justify-center rounded-md border px-4 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex h-10 cursor-pointer items-center justify-center rounded-md border px-4 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50",
     variants[variant],
     className,
   );

@@ -18,9 +18,53 @@ model User {
   accounts  Account[]
   sessions  Session[]
   companies Company[]
+  calendarEvents CalendarEvent[]
+  memos Memo[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Memo {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  key   String
+  value String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, key])
+  @@index([userId])
+}
+
+model CalendarEvent {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyId String?
+  company   Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  title       String
+  startsAt    DateTime
+  endsAt      DateTime
+  allDay      Boolean @default(false)
+  type        CalendarItemType @default(EVENT)
+  completed   Boolean @default(false)
+  color       String  @default("#2563EB")
+  location    String?
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([companyId])
+  @@index([startsAt])
+  @@index([endsAt])
+  @@index([type])
 }
 
 model Account {
@@ -63,6 +107,7 @@ model Company {
   id     String @id @default(cuid())
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  calendarEvents CalendarEvent[]
 
   name      String
   industry  String?
@@ -80,6 +125,12 @@ model Company {
   @@index([userId])
   @@index([status])
   @@index([priority])
+}
+
+enum CalendarItemType {
+  EVENT
+  TASK
+  DEADLINE
 }
 
 enum CompanyStatus {

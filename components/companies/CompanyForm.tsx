@@ -7,6 +7,7 @@ import { Button, buttonClasses } from "@/components/ui/Button";
 import { ColorPicker } from "@/components/ui/ColorPicker";
 import { Dropdown } from "@/components/ui/Dropdown";
 import { Input } from "@/components/ui/Input";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 import { Textarea } from "@/components/ui/Textarea";
 import {
   COMPANY_INDUSTRY_OPTIONS,
@@ -139,7 +140,7 @@ export function CompanyForm({
       </Field>
 
       <div className="flex items-center gap-3 pt-2">
-        <Button type="submit">保存</Button>
+        <SubmitButton pendingLabel="保存中...">保存</SubmitButton>
         {onCancel ? (
           <Button type="button" variant="secondary" onClick={onCancel}>
             キャンセル
@@ -164,8 +165,8 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="block space-y-2">
-      <span className="text-sm font-medium text-[#111111]">
+    <label className="block space-y-2 text-left">
+      <span className="block text-left text-sm font-medium text-[#111111]">
         {label}
         {required ? <span className="ml-1 text-[#666666]">*</span> : null}
       </span>

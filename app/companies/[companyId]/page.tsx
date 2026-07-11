@@ -2,8 +2,8 @@ import { deleteCompany } from "@/server/actions/company";
 import { CompanyDrawer } from "@/components/companies/CompanyDrawer";
 import { CompanyPriorityBadge } from "@/components/companies/CompanyPriorityBadge";
 import { CompanyStatusBadge } from "@/components/companies/CompanyStatusBadge";
-import { PageHeader } from "@/components/layout/PageHeader";
-import { Button, buttonClasses } from "@/components/ui/Button";
+import { buttonClasses } from "@/components/ui/Button";
+import { SubmitButton } from "@/components/ui/SubmitButton";
 import { DEFAULT_COMPANY_COLOR, normalizeCompanyColor } from "@/lib/constants/company";
 import { formatDate } from "@/lib/utils";
 import { getCompanyById } from "@/server/queries/company";
@@ -25,38 +25,32 @@ export default async function CompanyDetailPage({ params }: CompanyDetailPagePro
     (company as typeof company & { mypageId?: string | null }).mypageId ?? null;
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
-      <PageHeader
-        title={company.name}
-        description="企業詳細"
-        action={
-          <div className="flex gap-2">
-            <CompanyDrawer
-              company={{
-                id: company.id,
-                name: company.name,
-                industry: company.industry,
-                jobType: company.jobType,
-                status: company.status,
-                priority: company.priority,
-                color: companyColor,
-                mypageId,
-                mypageUrl: company.mypageUrl,
-                memo: company.memo,
-              }}
-              mode="edit"
-              redirectTo={`/companies/${company.id}`}
-              triggerClassName={buttonClasses({ variant: "secondary" })}
-              triggerLabel="編集"
-            />
-            <form action={deleteCompany.bind(null, company.id)}>
-              <Button type="submit" variant="danger">
-                削除
-              </Button>
-            </form>
-          </div>
-        }
-      />
+    <div className="space-y-8">
+      <div className="flex justify-end gap-2">
+        <CompanyDrawer
+          company={{
+            id: company.id,
+            name: company.name,
+            industry: company.industry,
+            jobType: company.jobType,
+            status: company.status,
+            priority: company.priority,
+            color: companyColor,
+            mypageId,
+            mypageUrl: company.mypageUrl,
+            memo: company.memo,
+          }}
+          mode="edit"
+          redirectTo={`/companies/${company.id}`}
+          triggerClassName={buttonClasses({ variant: "secondary" })}
+          triggerLabel="編集"
+        />
+        <form action={deleteCompany.bind(null, company.id)}>
+          <SubmitButton pendingLabel="削除中..." variant="danger">
+            削除
+          </SubmitButton>
+        </form>
+      </div>
 
       <section className="grid gap-4 rounded-lg border border-[#e5e5e5] bg-white p-6 sm:grid-cols-2">
         <div>

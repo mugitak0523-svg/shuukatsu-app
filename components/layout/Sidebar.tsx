@@ -2,9 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { SignOutButton } from "@/components/auth/SignOutButton";
-import { AppLogoIcon, BriefcaseIcon, SidebarToggleIcon } from "@/components/ui/Icons";
+import {
+  AppLogoIcon,
+  BriefcaseIcon,
+  CalendarIcon,
+  MemoIcon,
+  SidebarToggleIcon,
+} from "@/components/ui/Icons";
 import { APP_NAV_ITEMS } from "@/lib/constants/navigation";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +29,7 @@ export function Sidebar({ user }: SidebarProps) {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const displayName = user.name ?? user.email ?? "ユーザー";
+  const pathname = usePathname();
 
   useEffect(() => {
     function onPointerDown(event: PointerEvent) {
@@ -59,7 +67,7 @@ export function Sidebar({ user }: SidebarProps) {
             <>
               <Link
                 className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 text-sm font-semibold text-[#111111]"
-                href="/companies"
+                href="/calendar"
               >
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#111111] text-white">
                   <AppLogoIcon />
@@ -86,38 +94,46 @@ export function Sidebar({ user }: SidebarProps) {
             </button>
           )}
         </div>
-        <nav className="px-4 py-2">
-          <Link
-            className={cn(
-              "flex h-8 cursor-pointer items-center overflow-hidden rounded-md bg-[#f5f5f5] text-sm font-medium text-[#111111]",
-              !open && "w-8",
-            )}
-            href={APP_NAV_ITEMS[0].href}
-            onClick={(event) => event.stopPropagation()}
-            onMouseEnter={() => {
-              if (!open) {
-                setClosedHover(false);
-              }
-            }}
-            onMouseLeave={() => {
-              if (!open) {
-                setClosedHover(true);
-              }
-            }}
-            title={APP_NAV_ITEMS[0].label}
-          >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center">
-              <BriefcaseIcon />
-            </span>
-            <span
-              className={cn(
-                "ml-2 whitespace-nowrap transition-[opacity,width]",
-                open ? "w-20 opacity-100" : "w-0 opacity-0",
-              )}
-            >
-              {APP_NAV_ITEMS[0].label}
-            </span>
-          </Link>
+        <nav className="space-y-1 px-4 py-2">
+          {APP_NAV_ITEMS.map((item) => {
+            const active = pathname.startsWith(item.href);
+
+            return (
+              <Link
+                key={item.href}
+                className={cn(
+                  "flex h-8 cursor-pointer items-center overflow-hidden rounded-md text-sm font-medium text-[#111111] hover:bg-[#f5f5f5]",
+                  active && "bg-[#f5f5f5]",
+                  !open && "w-8",
+                )}
+                href={item.href}
+                onClick={(event) => event.stopPropagation()}
+                onMouseEnter={() => {
+                  if (!open) {
+                    setClosedHover(false);
+                  }
+                }}
+                onMouseLeave={() => {
+                  if (!open) {
+                    setClosedHover(true);
+                  }
+                }}
+                title={item.label}
+              >
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center">
+                  {getNavIcon(item.href)}
+                </span>
+                <span
+                  className={cn(
+                    "ml-2 whitespace-nowrap transition-[opacity,width]",
+                    open ? "w-24 opacity-100" : "w-0 opacity-0",
+                  )}
+                >
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
         </nav>
         <div className="min-h-0 flex-1" />
         <div
@@ -167,6 +183,18 @@ export function Sidebar({ user }: SidebarProps) {
       </div>
     </aside>
   );
+}
+
+function getNavIcon(href: string) {
+  if (href === "/calendar") {
+    return <CalendarIcon />;
+  }
+
+  if (href === "/memos") {
+    return <MemoIcon />;
+  }
+
+  return <BriefcaseIcon />;
 }
 
 function UserAvatar({

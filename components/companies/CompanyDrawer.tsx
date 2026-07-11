@@ -34,6 +34,7 @@ type CompanyDrawerProps =
       mode: "create";
       existingColors?: readonly (string | null | undefined)[];
       triggerLabel?: string;
+      triggerContent?: React.ReactNode;
       triggerClassName?: string;
     }
   | {
@@ -41,6 +42,7 @@ type CompanyDrawerProps =
       company: CompanyFormValue;
       redirectTo: string;
       triggerLabel?: string;
+      triggerContent?: React.ReactNode;
       triggerClassName?: string;
     };
 
@@ -117,7 +119,9 @@ export function CompanyDrawer(props: CompanyDrawerProps) {
         type="button"
         onClick={() => setOpen(true)}
       >
-        {props.triggerLabel ?? (props.mode === "create" ? "企業を追加" : "編集")}
+        {props.triggerContent ??
+          props.triggerLabel ??
+          (props.mode === "create" ? "企業を追加" : "編集")}
       </button>
 
       <Drawer
